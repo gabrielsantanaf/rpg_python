@@ -3,6 +3,7 @@ Módulo que define a classe Personagem e suas funcionalidades.
 """
 
 from models.base import Atributos
+from models.inventario import Item
 
 
 class Personagem(Atributos):
@@ -70,15 +71,23 @@ class Personagem(Atributos):
         Returns:
             bool: True se o item foi usado com sucesso, False caso contrário
         """
-        if item in self.inventario:
-            if item == "poção":
-                self.curar(30)
-                self.inventario.remove(item)
-                return True
-            elif item == "poção de mana":
-                self.mana = min(self.mana + 25, self.mana_maxima)
-                self.inventario.remove(item)
-                return True
+        # Suporta receber tanto um objeto Item quanto uma string com o nome
+        nome_item = item.nome if hasattr(item, "nome") else str(item)
+
+        # Procura o item no inventário (padronizamos a lista para conter objetos Item)
+        for inv_item in list(self.inventario):
+            inv_nome = inv_item.nome if hasattr(inv_item, "nome") else str(inv_item)
+            if inv_nome == nome_item:
+                if nome_item == "poção":
+                    self.curar(30)
+                    self.inventario.remove(inv_item)
+                    return True
+                elif nome_item == "poção de mana":
+                    self.mana = min(self.mana + 25, self.mana_maxima)
+                    self.inventario.remove(inv_item)
+                    return True
+                else:
+                    return False
         return False
     
     def adicionar_item(self, item):
@@ -88,7 +97,14 @@ class Personagem(Atributos):
         Args:
             item (str): Nome do item a ser adicionado
         """
-        self.inventario.append(item)
+        # Se receber uma string, cria um Item simples; se já for Item, adiciona diretamente
+        if isinstance(item, str):
+            self.inventario.append(Item(item, ""))
+        elif isinstance(item, Item):
+            self.inventario.append(item)
+        else:
+            # Tenta converter para string como fallback
+            self.inventario.append(Item(str(item), ""))
     
     def ganhar_xp(self, quantidade):
         """
@@ -130,7 +146,7 @@ class Personagem(Atributos):
             "nivel": self.nivel,
             "xp": self.xp,
             "xp_proximo_nivel": self.xp_proximo_nivel,
-            "inventario": self.inventario,
+            "inventario": [it.nome if hasattr(it, "nome") else str(it) for it in self.inventario],
             "mana": self.mana,
             "mana_maxima": self.mana_maxima,
             "dano_base": self.dano_base,
@@ -157,7 +173,9 @@ class Personagem(Atributos):
         )
         personagem.hp_maximo = dados.get("hp_maximo", personagem.hp)
         personagem.xp_proximo_nivel = dados.get("xp_proximo_nivel", 100)
-        personagem.inventario = dados.get("inventario", [])
+        # Converte inventário (lista de nomes) para objetos Item
+        inventario_dados = dados.get("inventario", [])
+        personagem.inventario = [Item(nome, "") for nome in inventario_dados]
         personagem.mana = dados.get("mana", 50)
         personagem.mana_maxima = dados.get("mana_maxima", 50)
         personagem.dano_base = dados.get("dano_base", 10)

@@ -118,12 +118,33 @@ class Missao:
             
             elif acao == "item":
                 if personagem.inventario:
-                    item = personagem.inventario[0]  # Usa o primeiro item
-                    if personagem.usar_item(item):
-                        print(f"{personagem.nome} usou {item}!")
-                        print(f"{personagem.nome} agora tem {personagem.hp} HP.")
-                    else:
-                        print(f"Não foi possível usar {item}.")
+                    # Lista itens e permite escolher qual usar
+                    while True:
+                        print("\nItens disponíveis:")
+                        for i, it in enumerate(personagem.inventario, start=1):
+                            print(f"[{i}] {it}")
+                        escolha_item = input("Digite o número do item que deseja usar (0 para cancelar): ").strip()
+                        if not escolha_item.isdigit():
+                            print("Entrada inválida! Digite um número.")
+                            continue
+                        escolha_num = int(escolha_item)
+                        if escolha_num == 0:
+                            print("Ação de item cancelada. Realizando ataque normal.")
+                            dano = personagem.atacar()
+                            dano_aplicado = self.inimigo.receber_dano_com_defesa(dano)
+                            print(f"{personagem.nome} causa {dano_aplicado} de dano em {self.inimigo.nome}!")
+                            print(f"{self.inimigo.nome} agora tem {self.inimigo.hp} HP.")
+                            break
+                        if escolha_num < 1 or escolha_num > len(personagem.inventario):
+                            print("Índice inválido! Tente novamente.")
+                            continue
+                        item = personagem.inventario[escolha_num - 1]
+                        if personagem.usar_item(item):
+                            print(f"{personagem.nome} usou {item}!")
+                            print(f"{personagem.nome} agora tem {personagem.hp} HP.")
+                        else:
+                            print(f"Não foi possível usar {item}.")
+                        break
                 else:
                     print(f"{personagem.nome} não tem itens no inventário!")
                     # Se não tem itens, ataca normalmente
@@ -210,7 +231,8 @@ class Missao:
             print(f"[1] Atacar")
             print(f"[2] Habilidade Especial (Mana: {personagem.mana}/{personagem.mana_maxima})")
             if personagem.inventario:
-                print(f"[3] Usar Item (Inventário: {', '.join(personagem.inventario)})")
+                inventario_str = ', '.join(it.nome if hasattr(it, 'nome') else str(it) for it in personagem.inventario)
+                print(f"[3] Usar Item (Inventário: {inventario_str})")
             
             escolha = input("> ").strip()
             

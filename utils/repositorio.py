@@ -6,6 +6,7 @@ Salva e carrega o progresso do jogo em arquivos JSON.
 import json
 import os
 from models.personagem import Personagem
+from models.inventario import Item
 from models.classes import Guerreiro, Mago, Arqueiro
 
 
@@ -77,7 +78,8 @@ class Repositorio:
             personagem.nivel = dados.get("nivel", 1)
             personagem.xp = dados.get("xp", 0)
             personagem.xp_proximo_nivel = dados.get("xp_proximo_nivel", 100)
-            personagem.inventario = dados.get("inventario", [])
+            # Converte inventário salvo (lista de nomes) para objetos Item
+            personagem.inventario = [Item(nome, "") for nome in dados.get("inventario", [])]
             personagem.mana = dados.get("mana", personagem.mana_maxima)
             personagem.mana_maxima = dados.get("mana_maxima", personagem.mana_maxima)
             personagem.dano_base = dados.get("dano_base", personagem.dano_base)

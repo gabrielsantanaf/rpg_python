@@ -9,6 +9,8 @@ from models.classes import Guerreiro, Mago, Arqueiro
 from models.missão import Missao
 from utils.repositorio import Repositorio
 from utils.logger import Logger
+from models.inventario import Item, Inventario
+
 
 
 class Jogo:
