@@ -42,9 +42,14 @@ class Personagem(Atributos):
             int: Dano causado pelo ataque
         """
         import random
+        from utils import calcular_critico
+
         # Dano varia entre 80% e 120% do dano base
         dano = int(self.dano_base * random.uniform(0.8, 1.2))
-        return max(1, dano)
+
+        # Aplica possibilidade de crítico (padrão 20%), sem animação
+        dano_final, _ = calcular_critico(dano, chance=0.20, multiplicador=1.8, animacao=False, verbose=False)
+        return max(1, dano_final)
     
     def habilidade_especial(self):
         """
@@ -56,9 +61,14 @@ class Personagem(Atributos):
         # Implementação básica para personagens genéricos
         if self.mana >= 20:
             import random
+            from utils import calcular_critico
+
             self.mana -= 20
             dano = int(self.dano_base * random.uniform(1.3, 1.7))
-            return max(1, dano)
+
+            # Aplica crítico com chance padrão, sem animação
+            dano_final, _ = calcular_critico(dano, chance=0.20, multiplicador=1.8, animacao=False, verbose=False)
+            return max(1, dano_final)
         return 0
     
     def usar_item(self, item):

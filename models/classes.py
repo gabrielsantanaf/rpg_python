@@ -34,10 +34,15 @@ class Guerreiro(Personagem):
         """
         if self.mana >= 15:
             import random
+            from utils import calcular_critico
+
             self.mana -= 15
             # Ataque devastador causa 150% a 200% do dano base
             dano = int(self.dano_base * random.uniform(1.5, 2.0))
-            return max(1, dano)
+
+            # Aplicar crítico com chance um pouco menor para ataques pesados
+            dano_final, _ = calcular_critico(dano, chance=0.15, multiplicador=1.8, animacao=False, verbose=False)
+            return max(1, dano_final)
         return 0
     
     def atacar(self):
@@ -48,9 +53,14 @@ class Guerreiro(Personagem):
             int: Dano causado pelo ataque
         """
         import random
+        from utils import calcular_critico
+
         # Guerreiros causam mais dano físico
         dano = int(self.dano_base * random.uniform(0.9, 1.3))
-        return max(1, dano)
+
+        # Chance de crítico ligeiramente reduzida para ataques físicos
+        dano_final, _ = calcular_critico(dano, chance=0.18, multiplicador=1.9, animacao=False, verbose=False)
+        return max(1, dano_final)
 
 
 class Mago(Personagem):
@@ -81,10 +91,15 @@ class Mago(Personagem):
         """
         if self.mana >= 20:
             import random
+            from utils import calcular_critico
+
             self.mana -= 20
             # Bola de fogo causa 200% a 250% do dano base
             dano = int(self.dano_base * random.uniform(2.0, 2.5))
-            return max(1, dano)
+
+            # Magia tem a mesma chance padrão de crítico
+            dano_final, _ = calcular_critico(dano, chance=0.20, multiplicador=2.0, animacao=False, verbose=False)
+            return max(1, dano_final)
         return 0
     
     def atacar(self):
@@ -95,9 +110,13 @@ class Mago(Personagem):
             int: Dano causado pelo ataque
         """
         import random
+        from utils import calcular_critico
+
         # Magos causam dano mágico consistente
         dano = int(self.dano_base * random.uniform(0.85, 1.15))
-        return max(1, dano)
+
+        dano_final, _ = calcular_critico(dano, chance=0.22, multiplicador=1.75, animacao=False, verbose=False)
+        return max(1, dano_final)
 
 
 class Arqueiro(Personagem):
@@ -128,12 +147,14 @@ class Arqueiro(Personagem):
         """
         if self.mana >= 18:
             import random
+            from utils import calcular_critico
+
             self.mana -= 18
             # Chuva de flechas causa 140% a 180% do dano base
             dano = int(self.dano_base * random.uniform(1.4, 1.8))
-            # 30% de chance de crítico
-            if random.random() < 0.3:
-                dano = int(dano * 1.5)
-            return max(1, dano)
+
+            # Usa calcular_critico com chance 30% e multiplicador 1.5
+            dano_final, _ = calcular_critico(dano, chance=0.30, multiplicador=1.5, animacao=False, verbose=False)
+            return max(1, dano_final)
         return 0
 
