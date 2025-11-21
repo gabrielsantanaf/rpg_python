@@ -126,6 +126,9 @@ class Jogo:
         print(f"=== Status de {self.personagem.nome} ===")
         print("=" * 40)
         print(f"Classe: {self.personagem.classe}")
+        # Exibe sub-classe quando presente
+        if getattr(self.personagem, 'sub_classe', None):
+            print(f"Sub-classe: {self.personagem.sub_classe}")
         print(f"Nível: {self.personagem.nivel}")
         print(f"XP: {self.personagem.xp}/{self.personagem.xp_proximo_nivel}")
         print(f"HP: {self.personagem.hp}/{self.personagem.hp_maximo}")
@@ -133,6 +136,20 @@ class Jogo:
         print(f"Mana: {self.personagem.mana}/{self.personagem.mana_maxima}")
         print(f"Dano Base: {self.personagem.dano_base}")
         print(f"Defesa: {self.personagem.defesa}")
+        # Atributos específicos de sub-classes
+        # Exibe apenas quando relevante (valores não-zero ou buff diferente de 1)
+        if getattr(self.personagem, 'crit_chance', 0) > 0:
+            print(f"Chance de Crítico: {self.personagem.crit_chance*100:.1f}%")
+        if getattr(self.personagem, 'stun_chance', 0) > 0:
+            print(f"Chance de Stun: {self.personagem.stun_chance*100:.1f}%")
+        if getattr(self.personagem, 'dot_sangramento', 0) > 0:
+            print(f"Sangramento (DoT): {self.personagem.dot_sangramento*100:.1f}%")
+        if getattr(self.personagem, 'buff_dano', 1.0) != 1.0:
+            print(f"Buff de Dano: x{self.personagem.buff_dano:.2f}")
+        if getattr(self.personagem, 'chance_queimadura', 0) > 0:
+            print(f"Chance de Queimadura: {self.personagem.chance_queimadura*100:.1f}%")
+        if getattr(self.personagem, 'cura_base', 0) > 0:
+            print(f"Cura Base: {self.personagem.cura_base}")
         print(f"\nInventário ({len(self.personagem.inventario)} itens):")
         if self.personagem.inventario:
             for item in self.personagem.inventario:

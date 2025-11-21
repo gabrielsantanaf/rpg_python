@@ -75,6 +75,9 @@ class Repositorio:
             # Restaura os atributos do dicionário
             personagem.hp = dados.get("hp", personagem.hp)
             personagem.hp_maximo = dados.get("hp_maximo", personagem.hp_maximo)
+            # Garante que o HP atual não exceda o máximo (caso o save esteja inconsistente)
+            if personagem.hp > personagem.hp_maximo:
+                personagem.hp = personagem.hp_maximo
             personagem.nivel = dados.get("nivel", 1)
             personagem.xp = dados.get("xp", 0)
             personagem.xp_proximo_nivel = dados.get("xp_proximo_nivel", 100)
@@ -84,6 +87,14 @@ class Repositorio:
             personagem.mana_maxima = dados.get("mana_maxima", personagem.mana_maxima)
             personagem.dano_base = dados.get("dano_base", personagem.dano_base)
             personagem.defesa = dados.get("defesa", personagem.defesa)
+            # Restaura sub-classe e atributos específicos de subclasses, se presentes
+            personagem.sub_classe = dados.get("sub_classe", personagem.sub_classe if hasattr(personagem, 'sub_classe') else None)
+            personagem.crit_chance = dados.get("crit_chance", getattr(personagem, 'crit_chance', 0.05))
+            personagem.stun_chance = dados.get("stun_chance", getattr(personagem, 'stun_chance', 0.0))
+            personagem.dot_sangramento = dados.get("dot_sangramento", getattr(personagem, 'dot_sangramento', 0.0))
+            personagem.buff_dano = dados.get("buff_dano", getattr(personagem, 'buff_dano', 1.0))
+            personagem.chance_queimadura = dados.get("chance_queimadura", getattr(personagem, 'chance_queimadura', 0.0))
+            personagem.cura_base = dados.get("cura_base", getattr(personagem, 'cura_base', 0))
             
             return personagem
         except Exception as e:
