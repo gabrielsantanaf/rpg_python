@@ -34,20 +34,29 @@ python main.py
 
 ## 📁 Estrutura do Projeto
 
-```
-rpg_oo/
-├── README.md
-├── main.py                 # Arquivo principal que inicia o jogo
-├── jogo.py                 # Classe principal que orquestra o jogo
+rpg_python/
+├── README.md                  # Documentação principal do projeto
+├── main.py                    # Arquivo principal que inicia o jogo
+├── jogo.py                    # Classe principal que orquestra o jogo
+
 ├── models/
-│   ├── base.py            # Classe base Atributos
-│   ├── personagem.py      # Classe Personagem
-│   ├── classes.py         # Subclasses (Guerreiro, Mago, Arqueiro)
-│   ├── inimigo.py         # Classes de inimigos
-│   └── missão.py          # Sistema de missões e combate
-└── utils/
-    ├── repositorio.py     # Sistema de persistência (JSON)
-    └── logger.py          # Sistema de logging
+│   ├── base.py                # Classe base de atributos e comportamentos gerais
+│   ├── personagem.py          # Classe Personagem (jogador)
+│   ├── classes.py             # Subclasses (Guerreiro, Mago, Arqueiro)
+│   ├── inimigo.py             # Classes e lógica de inimigos
+│   ├── inventario.py          # Sistema de inventário do personagem
+│   ├── missão.py              # Sistema de missões, recompensas e progresso
+│   └── __init__.py
+
+├── utils/
+│   ├── critico.py             # Cálculo de acertos críticos
+│   ├── repositorio.py         # Sistema de persistência utilizando JSON
+│   ├── logger.py              # Sistema de logging estruturado
+│   └── __init__.py
+
+└── tests/
+    ├── show_status.py         # Ferramenta para visualizar status do personagem durante testes
+    └── test_critico_run.py    # Testes do sistema de crítico
 ```
 
 ## 🎯 Classes Principais
@@ -74,6 +83,42 @@ Subclasse especializada em magia:
 Subclasse equilibrada:
 - HP e Mana médios
 - Habilidade Especial: Chuva de Flechas (com chance de crítico)
+
+## SubClasses
+### Berserker (Guerreiro)
+Subclasse especializada em combate corpo a corpo:
+- Diminue o HP máximo
+- Baixa Mana
+- Habilidade Especial: Ganha status de dano crítico
+
+### Paladino (Guerreiro)
+Subclasse especializada em combate corpo a corpo:
+- Aumenta o HP máximo
+- Aumenta Defesa
+- Habilidade Especial: Ganha status de aumento de vida
+
+### Piromante (Mago)
+Subclasse especializada em magia:
+- Baixo HP e Defesa
+- Alta Mana
+- Habilidade Especial: Chance de queimar inimigos
+
+### Clérigo (Mago)
+Subclasse especializada em magia:
+- Baixo HP e Defesa
+- Alta Mana máxima
+- Habilidade Especial: Aumenta a cura base
+
+### Patrulheiro (Arqueiro)
+Subclasse equilibrada:
+- HP e Mana médios
+- Habilidade Especial: Aumentar o dano base e Status de chance de crítico
+
+### Caçador (Arqueiro)
+Subclasse equilibrada:
+- HP e Mana médios
+- Habilidade Especial: Chance de atordoar e de aplicar sangramento
+
 
 ### Inimigo
 Classes de inimigos com diferentes dificuldades:
@@ -193,7 +238,7 @@ Este projeto foi desenvolvido como trabalho acadêmico para aprendizado de Progr
 
 ## 👥 Integrantes
 
-[João Gabriel, Fabricio Rychard, Luiz André, Andrew Bezerra, Luanderson Santana, Mike Daivid]
+[João Gabriel, Fabricio Rychard, Luiz André, Andrew Bezerra, Luanderson Santana, Mike David]
 
 ---
 
